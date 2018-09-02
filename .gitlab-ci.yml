@@ -1,0 +1,24 @@
+image: node:10-stretch
+
+cache:
+  paths:
+  - node_modules/
+
+stages:
+  - install
+  - deploy
+
+Install modules:
+  stage: install
+  script:
+   - npm install
+
+Deploy to Heroku:
+  stage: deploy
+  script:
+    - apt-get update -yq
+    - apt-get install rubygems ruby-dev -y
+    - gem install dpl
+    - dpl --provider=heroku --app=angristan-react-counter-app --api-key=$HEROKU_API_KEY
+  only:
+    - master
